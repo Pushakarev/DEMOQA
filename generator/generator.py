@@ -6,10 +6,13 @@ import random
 from dataclasses import dataclass
 
 
-
 faker_ru = Faker('ru_RU')
+faker_en = Faker('En')
 Faker.seed()
 
+@dataclass
+class Color:
+    color_name: list = None
 
 
 
@@ -27,8 +30,12 @@ class Person:
     mobile: str = None
 
 
-
-
+@dataclass
+class Date:
+    day: int = None
+    month: int = None
+    year: int = None
+    time: int = None
 
 
 def generated_person():
@@ -52,5 +59,21 @@ def generate_file():
         file.write(f'WW3 is now{random.randint(0,99)} ')
         file.close()
         return file.name, path
+
+
+def generated_color():
+    yield Color(
+        color_name=["Red", "Blue", "Green", "Yellow","Purple", "Black", "White", "Voilet", "Indigo", "Magenta", "Aqua"]
+
+
+    )
+
+def generated_date():
+    yield Date (
+        year = faker_en.year(),
+        month = faker_en.month_name(),
+        day = faker_en.day_of_month(),
+        time = '12:15'
+    )
 
 

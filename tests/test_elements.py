@@ -1,6 +1,9 @@
 import random
 import base64
 import time
+
+import allure
+
 from pages.base_page import BasePage
 from conftest import driver
 import pytest
@@ -10,86 +13,25 @@ from selenium.webdriver import ActionChains
 from selenium.webdriver.support.wait import WebDriverWait as wait
 from selenium.webdriver.support import expected_conditions as EC
 
-from conftest import driver
-import allure
-
-#
-#
-# # базовые методы
-# class BasePage:
-#     def __init__(self, driver, url):
-#         self.driver = driver
-#         self.url = url
-#
-#
-#
-#     def open(self):
-#         self.driver.get(self.url)
-#
-#     def element_is_visable(self, locator, timeout = 5):
-#         return wait (self.driver,timeout).until(EC.visibility_of_element_located(locator))
-#
-#
-#     def elements_are_visable(self, locator, timeout = 5):
-#         return wait (self.driver,timeout).until(EC.visibility_of_all_elements_located(locator))
-#
-#
-#
-#     def element_is_present(self, locator, timeout = 5):
-#         return wait (self.driver,timeout).until(EC.presence_of_element_located(locator))
-#
-#
-#     def elements_are_present(self, locator, timeout = 5):
-#         return wait (self.driver,timeout).until(EC.presence_of_all_elements_located(locator))
-#
-#
-#     def element_is_not_visable(self, locator, timeout = 5):
-#         return wait (self.driver,timeout).until(EC.invisibility_of_element_located(locator))
-#
-#     def element_is_clickable(self, locator, timeout=5):
-#         return wait(self.driver, timeout).until(EC.element_to_be_clickable(locator))
-#
-#     def go_to_element(self, element):
-#         self.driver.execute_script ("arguments[0].scrollIntoView();", element)
-#
-#     def action_double_click(self, element):
-#         action = ActionChains(self.driver)
-#         action.double_click(element)
-#         action.perform()
-#
-#     def action_right_click(self,element):
-#         action = ActionChains(self.driver)
-#         action.context_click(element)
-#         action.perform()
-#
-#
-#
-
-
-
-
-
+@allure.suite('Elements')
 
 
 class TestElements:
+    @allure.feature('TextBox')
     class TestTextBox:
-
-
-
+        @allure.title('TestBoxTest')
         def test_text_box(self, driver):
             text_box_page = TextBoxPage(driver, 'https://demoqa.com/text-box')
             text_box_page.open()
-
             full_name, email, current_address, permanent_address = text_box_page.fill_all_fields()
             output_name, output_email, output_cur_addr, output_per_addr = text_box_page.check_filled_form()
-
             assert full_name == output_name
             assert email == output_email
             assert current_address == output_cur_addr
             assert permanent_address == output_per_addr
 
     class TestCheckBox:
-
+        @allure.title('CheckboxTest')
         def test_check_box(self, driver):
             check_box_page = CheckBoxPage(driver, "https://demoqa.com/checkbox")
             check_box_page.open()
@@ -100,7 +42,7 @@ class TestElements:
             assert input_checkbox == output_result
 
     class TestRadioButton:
-
+        @allure.title('RadioButtonTest')
         def test_radio_button(self, driver):
             radio_button_page = RadioButtonPage(driver, "https://demoqa.com/radio-button")
             radio_button_page.open()

@@ -35,7 +35,6 @@ class WebTablePageLocators:
     # add person
     ADD_BUTTON = (By.CSS_SELECTOR, "button[id = 'addNewRecordButton']")
     FIRST_INPUT = (By.CSS_SELECTOR, "input[id= 'firstName']")
-
     LASTNAME_INPUT = (By.CSS_SELECTOR, "input[id= 'lastName']")
     EMAIL_INPUT = (By.CSS_SELECTOR, "input[id= 'userEmail']")
     AGE_INPUT = (By.CSS_SELECTOR, "input[id= 'age']")

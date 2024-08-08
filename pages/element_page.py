@@ -70,10 +70,6 @@ class CheckBoxPage(BasePage):
             else:
                 break
 
-        #
-        # item = item_list[random.randint(1,14)]
-        # self.go_to_element(item)
-        # item.click()
 
     def get_checked_checkboxes(self):
         checked_list = self.elements_are_present(self.locators.CHECKED_ITEMS)
