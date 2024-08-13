@@ -3,6 +3,7 @@ import os
 import random
 import time
 
+import allure
 import requests
 from selenium.common import TimeoutException
 from selenium.webdriver.common.by import By
@@ -11,13 +12,13 @@ from locators.elements_page_locators import TextBoxPageLocator, RadioButtonLocat
     ButtonPageLocators, LinksPageLocators, UploadAndDownloadPageLocators, DynamicPropertiesPageLocators
 from generator.generator import generated_person, generate_file
 from locators.elements_page_locators import CheckBoxPageLocators
-from generator.generator import generate_file
 from pages.base_page import BasePage
 
 # заполняем поля
 class TextBoxPage(BasePage):
     locators = TextBoxPageLocator
 # заполнить поля для ввода данных пользователя
+    @allure.step('Filling empty fields')
     def fill_all_fields(self):
         person_generator = generated_person()
         person_info = next(person_generator)
@@ -25,16 +26,13 @@ class TextBoxPage(BasePage):
         email = person_info.email
         current_address = person_info.current_address
         permanent_address = person_info.permanent_address
-
-        self.element_is_visable(self.locators.FULL_NAME).send_keys(full_name)
-        self.element_is_visable(self.locators.EMAIL).send_keys(email)
-        self.element_is_visable(self.locators.CURRENT_ADDRESS).send_keys(current_address)
-        self.element_is_visable(self.locators.PERMANENT_ADDRESS).send_keys(permanent_address)
-        self.element_is_visable(self.locators.SUBMIT).click()
+        with allure.step('Filling gaps'):
+            self.element_is_visable(self.locators.FULL_NAME).send_keys(full_name)
+            self.element_is_visable(self.locators.EMAIL).send_keys(email)
+            self.element_is_visable(self.locators.CURRENT_ADDRESS).send_keys(current_address)
+            self.element_is_visable(self.locators.PERMANENT_ADDRESS).send_keys(permanent_address)
+            self.element_is_visable(self.locators.SUBMIT).click()
         return full_name, email, current_address, permanent_address
-
-
-
 
         # проверяем заполненную форму
     def check_filled_form(self):
@@ -54,32 +52,29 @@ class CheckBoxPage(BasePage):
     def open_full_list(self):
         self.element_is_visable(self.locators.EXPAND_ALL_BUTTON).click()
 
+
+    @allure.step('Process of random clicking')
     def click_random_checkbox(self):
-        item_list = self.elements_are_visable(self.locators.ITEM_LIST)
-        # for item in item_list:
-        #     self.go_to_element(item)
-        #     item.click()
-        count = 21
-        while count != 0:
-            item = item_list [random.randint(1,14)]
-            if count > 0:
-                self.go_to_element(item)
-                item.click()
-                print(item)
-                count -=1
-            else:
-                break
+        with allure.step('random clicking'):
+            item_list = self.elements_are_visable(self.locators.ITEM_LIST)
+            count = 20
+            while count != 0:
+                item = item_list [random.randint(1,14)]
+                if count > 0:
+                    self.go_to_element(item)
+                    item.click()
+                    count -=1
+                else:
+                    break
 
-
+    @allure.step('Process of checking random clicking results')
     def get_checked_checkboxes(self):
         checked_list = self.elements_are_present(self.locators.CHECKED_ITEMS)
         data = []
         for box in checked_list:
             title_item = box.find_element(By.XPATH, self.locators.TITLE_ITEM)
             data.append(title_item.text)
-            print(data)
         return str(data).replace(' ', '').replace('doc', '').replace('.', '').lower()
-
 
 
     def get_output_result(self):
@@ -87,20 +82,21 @@ class CheckBoxPage(BasePage):
         data = []
         for item in result_list:
             data.append(item.text)
-            print(data)
         return str(data).replace(' ', '').replace('doc', '').replace('.', '').lower()
 
 
 class RadioButtonPage(BasePage):
     locators = RadioButtonLocators
 
+    @allure.step('Process of checking radiobuttons')
     def click_on_the_radio_button(self, choice):
-        choices = {
-            'yes': self.locators.RADIO_BUTTON_YES,
-            'impressive': self.locators.RADIO_BUTTON_IMPRESSIVE,
-            'no': self.locators.RADIO_BUTTON_NO
-        }
-        self.element_is_visable(choices[choice]).click()
+        with allure.step('checking radiobuttons'):
+            choices = {
+                'yes': self.locators.RADIO_BUTTON_YES,
+                'impressive': self.locators.RADIO_BUTTON_IMPRESSIVE,
+                'no': self.locators.RADIO_BUTTON_NO
+            }
+            self.element_is_visable(choices[choice]).click()
 
     def get_output_result(self):
         return self.element_is_present(self.locators.OUTPUT_RESULT).text
@@ -108,7 +104,6 @@ class RadioButtonPage(BasePage):
 
 class WebTablePage(BasePage):
     locators= WebTablePageLocators()
-
 
     def add_new_person (self):
         count = 1
@@ -120,16 +115,16 @@ class WebTablePage(BasePage):
             salary= person_info.salary
             age =person_info.age
             department = person_info.department
-            self.element_is_visable(self.locators.ADD_BUTTON).click()
-            self.element_is_visable(self.locators.FIRST_INPUT).send_keys(firstname)
-            self.element_is_visable(self.locators.LASTNAME_INPUT).send_keys(lastname)
-            self.element_is_visable(self.locators.EMAIL_INPUT).send_keys(email)
-            self.element_is_visable(self.locators.AGE_INPUT).send_keys(age)
-            self.element_is_visable(self.locators.DEPARTMENT_INPUT).send_keys(department)
-            self.element_is_visable(self.locators.SALARY_INPUT).send_keys(salary)
-            self.element_is_visable(self.locators.SUBMIT).click()
+            with allure.step('Filling fields'):
+                self.element_is_visable(self.locators.ADD_BUTTON).click()
+                self.element_is_visable(self.locators.FIRST_INPUT).send_keys(firstname)
+                self.element_is_visable(self.locators.LASTNAME_INPUT).send_keys(lastname)
+                self.element_is_visable(self.locators.EMAIL_INPUT).send_keys(email)
+                self.element_is_visable(self.locators.AGE_INPUT).send_keys(age)
+                self.element_is_visable(self.locators.DEPARTMENT_INPUT).send_keys(department)
+                self.element_is_visable(self.locators.SALARY_INPUT).send_keys(salary)
+                self.element_is_visable(self.locators.SUBMIT).click()
             count-=1
-            print(firstname, lastname, email, age, department, salary)
             return [firstname, lastname, str(age), email,str(salary),department]
     def  check_new_added_person(self):
         person_list = self.elements_are_present(self.locators.FULL_PEOPLE_LIST)
@@ -161,22 +156,22 @@ class WebTablePage(BasePage):
     def check_delete_person(self):
         return self.element_is_present(self.locators.NOW_ROWS_FOUND).text
 
-    def select_up_to_some_rows(self):
-        count = [5,10,20,25,50,100]
-        data = []
-        for x in count:
-            count_row_button =  self.go_to_element(self.element_is_visable(self.locators.COUNT_ROW_LIST))
-            self.go_to_element(count_row_button)
-            count_row_button.click()
-            self.element_is_visable(By.CSS_SELECTOR,f'option[value="{x}"]').click()
-            data.append(self.check_count_rows())
-
-
-
     def check_count_rows(self):
         list_rows = self.elements_are_present(self.locators.FULL_PEOPLE_LIST)
         return len(list_rows)
 
+    def select_up_to_some_rows(self):
+        count = [5,10,20,25,50,100]
+        data = []
+        for x in count:
+            count_row_button = self.element_is_visable(self.locators.COUNT_ROW_LIST)
+            self.go_to_element(count_row_button)
+            count_row_button.click()
+            option_locator = (By.CSS_SELECTOR, f'option[value="{x}"]')
+            option = self.element_is_visable(option_locator)
+            option.click()
+            data.append(self.check_count_rows())
+        return count
 
 
 class ButtonPage(BasePage):
@@ -186,17 +181,12 @@ class ButtonPage(BasePage):
         if type_click == 'double':
             self.action_double_click(self.element_is_visable(self.locators.DOUBLE_BUTTON))
             return self.check_clicked_on_the_button(self.locators.SUCESS_DOUBLE)
-
-
         if type_click == "right":
             self.action_right_click(self.element_is_visable(self.locators.RIGHT_CLICK_BUTTON))
             return self.check_clicked_on_the_button(self.locators.SUCESS_RIGHT)
-
-
         if type_click == "click":
             self.element_is_visable(self.locators.CLICK_ME_BUTTON).click()
             return self.check_clicked_on_the_button(self.locators.SUCESS_CLICK_ME)
-
 
     def check_clicked_on_the_button(self,element):
         return self.element_is_present(element).text
@@ -213,7 +203,6 @@ class LinksPage(BasePage):
             self.driver.switch_to.window(self.driver.window_handles[1])
             url = self.driver.current_url
             return link_href, url
-
         else:
             return  link_href, request.status_code
 

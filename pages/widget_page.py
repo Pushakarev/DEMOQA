@@ -1,9 +1,7 @@
 import random
 import time
-
 from selenium.webdriver import Keys
 from selenium.webdriver.support.select import Select
-
 from generator.generator import generated_color, generated_date
 from locators.widget_page_locators import AcordianPageLocators, AutoCompletePageLocators, DatePickerPageLocators, \
     SlidePageLocators, ProgressBarPageLocators, TabPageLocators, ToolTipsPageLocators, MenuPageLocators, \
@@ -11,7 +9,6 @@ from locators.widget_page_locators import AcordianPageLocators, AutoCompletePage
 from pages.base_page import BasePage
 
 class AccordianPage(BasePage):
-
 
     locators= AcordianPageLocators()
     def check_accordian(self,accordian_num):
@@ -36,7 +33,6 @@ class AutoCompletePage(BasePage):
     def fill_input_multi(self):
         colors = random.sample(next(generated_color()).color_name, k=3)
         for color in colors:
-
             input_multi = self.element_is_clickable(self.locators.MULTI_INPUT)
             input_multi.send_keys(color)
             input_multi.send_keys(Keys.ENTER)
@@ -58,7 +54,6 @@ class AutoCompletePage(BasePage):
         for color in color_list:
             colors.append(color.text)
         return colors
-
 
     def fill_single(self):
         color = random.sample(next(generated_color()).color_name, k=1)
@@ -101,7 +96,6 @@ class DatePickerPage(BasePage):
 
 
 
-
     def select_date_by_text(self,element,value):
         select = Select(self.element_is_present(element))
         select.select_by_visible_text(value)
@@ -124,7 +118,6 @@ class SliderPage(BasePage):
 
 class ProgressBarPage(BasePage):
     locators= ProgressBarPageLocators()
-
     def change_progressbar(self):
         value_before = self.element_is_present(self.locators.PROGRESS_BAR_VALUE).text
         progress_bar = self.element_is_visable(self.locators.PROGRESS_BAR_BUTTON)
@@ -137,7 +130,6 @@ class ProgressBarPage(BasePage):
 
 class TabPage(BasePage):
     locators = TabPageLocators()
-
     def check_tabs(self):
         what_button = self.element_is_visable(self.locators.TABS_WHAT)
         origin_button = self.element_is_visable(self.locators.TABS_ORIGIN)
@@ -149,8 +141,6 @@ class TabPage(BasePage):
         origin_content = self.element_is_visable(self.locators.TABS_ORIGIN_CONTENT).text
         use_button.click()
         use_content = self.element_is_visable(self.locators.TAB_USE_CONTENT).text
-        # more_button.click()
-        # more_button = self.element_is_visable(self.locators.TABS_MORE_CONTENT).text
         return len(what_content), len(origin_content), len(use_content)
 
 class ToolTipsPage(BasePage):
@@ -173,7 +163,6 @@ class ToolTipsPage(BasePage):
 
 class MenuPage(BasePage):
     locators =MenuPageLocators()
-
     def check_menu (self):
         menu_item_list = self.elements_are_present(self.locators.MENU_ITEM)
         data =[]

@@ -1,12 +1,5 @@
-import os
 import random
 import time
-
-from selenium.webdriver import Keys
-
-
-from generator.generator import generated_person, generate_file
-from locators.form_page_locators import FormPageLocators
 from locators.interaction_page_locators import SortablePageLocators, SelectablePageLocators, ResizablePageLocators, \
     DropPageLocators, DraggablePageLocators
 from pages.base_page import BasePage
@@ -60,7 +53,6 @@ class SelectablePage(BasePage):
 class ResizablePage(BasePage):
     locators= ResizablePageLocators()
 
-
     def size_of_window(self,value_of_window):
         width =value_of_window
         height =value_of_window
@@ -74,7 +66,6 @@ class ResizablePage(BasePage):
     def change_size_big_box(self):
         self.action_drag_drop(self.element_is_visable(self.locators.BIG_BOX_HANDLE),400,200)
         big_max_size= self.size_of_window(self.get_max_min_size(self.locators.BIG_BOX))
-
         self.action_drag_drop(self.element_is_visable(self.locators.BIG_BOX_HANDLE), -400, -200)
         big_min_size = self.size_of_window(self.get_max_min_size(self.locators.BIG_BOX))
         return big_max_size, big_min_size
@@ -82,7 +73,6 @@ class ResizablePage(BasePage):
     def change_size_small_box(self):
         self.action_drag_drop(self.element_is_visable(self.locators.SAMLL_BOX_HANDLE), 400, 200)
         max_size = self.size_of_window(self.get_max_min_size(self.locators.SMALL_BOX))
-
         self.action_drag_drop(self.element_is_visable(self.locators.SAMLL_BOX_HANDLE), -400, -200)
         min_size = self.size_of_window(self.get_max_min_size(self.locators.SMALL_BOX))
         return max_size, min_size

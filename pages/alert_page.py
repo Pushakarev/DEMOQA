@@ -40,7 +40,7 @@ class AlertsPage(BasePage):
         return alert_window.text
 
     def check_see_alert_prompt(self):
-        text = 'fdfdf'
+        text = 'Maxim'
         self.element_is_visable(self.locators.PROMPT_ALERT_BUTTON).click()
         alert_window = self.driver.switch_to.alert
         alert_window.send_keys(text)
